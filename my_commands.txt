@@ -1,0 +1,94 @@
+Root: Changeme1User: Changemeto1
+	ФАЙЛОВАЯ СИСТЕМА
+Создание зашифрованного раздела на /dev/sda5
+Создание всех необходимых разделов на зашифрованном
+	УСТАНОВКА
+Установка системы
+Выбор ssh server и system applications
+	ЗАПУСК И ПРОВЕРКА
+lsblk
+su -
+apt-get install sudo
+	НАСТРОЙКА SSH
+nano /etc/ssh/sshd_config :
+Port 4242
+PermitRootLogin: no
+	ROOT-ПРАВА ПОЛЬЗОВАТЕЛЮ
+usermod -aG root user
+nano /etc/sudoers:
+user    ALL=(ALL:ALL) ALL
+reboot
+	ДОСТУП ЧЕРЕЗ ТЕРМИНАЛ
+Проброс портов
+ssh user@localhost -p 4242
+	НАСТРОЙКА ВХОДА ПОД SUDO
+Defaults  badpass_message="Password is wrong, please try again"
+Defaults        passwd_tries=3
+	ФАЙЕРВОЛ
+apt-get install ufw
+ufw status
+ufw enable
+ufw status
+sudo ufw default deny incoming
+sudo ufw default allow outcoming
+ufw allow 4242
+	ПОЛИТИКА ПАРОЛЕЙ
+nano /etc/login.defs
+PASS_MAX_DAYS 30
+PASS_MIN_DAYS 2
+PASS_WARN_AGE 7
+apt-get install libpam-pwquality
+cd /etc/pam.d
+cp common-password common-password.backup
+nano common-password
+password        requisite                       pam_pwquality.so retry=3 maxrepeat=3 minlen=10 dcredit=1 ucredit=1
+passwd user
+passwd root
+	НАСТРОЙКИ TTY
+nano /etc/systemd/logind.conf
+Раскомментировать и добааить:
+NAutoVTs=8
+ReserveVT=8
+	ЛОГИРОВАНИЕ SUDO
+nano /etc/sudoers:
+defaults        logfile=/var/log/sudo
+Действие под пользователем с sudo
+Проверка лога:
+nano /var/log/sudo
+	СОЗДАНИЕ СКРИПТА
+// для утилиты netstat
+apt-get install net-tools
+su user
+cd ~/
+touch monitoring.sh
+nano monitoring.sh
+
+
+____________________
+ВО ВРЕМЯ ПРОВЕРКИ
+
+Во время защиты вам будет задано
+несколько вопросов о выбранной вами 
+операционной системе. 
+Разница между aptitude и apt,
+(Aptitude - оболочка для apt)
+Разница между adduser и useradd,
+Разница между GNU и Linux,
+Разница между сервером и десктопом,
+Что новее: SELinux или AppArmor
+Что такое unixtime (1.01.1970)
+hostnamectl
+lsblk и сравнение с таблицей
+lsof -i -P - открытые порты
+xserver status, xorg status
+Пытаемся логиниться под рут
+Пытаемся логиниться по порту 22 и другим
+Меняем имя хоста в
+nano /etc/hostname
+Adduser - добавляем пользователя и группу
+Пытаемся залогиниться под этим пользователем
+Пытаемся получить рут-права под этим пользователем
+Usermod -aG group user
+nano /etc/group
+Groups
+Groups user
