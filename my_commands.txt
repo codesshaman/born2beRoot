@@ -1,68 +1,109 @@
-Root: Changeme1User: Changemeto1
 	ФАЙЛОВАЯ СИСТЕМА
 Создание зашифрованного раздела на /dev/sda5
-Создание всех необходимых разделов на зашифрованном
+Создание всех необходимых подразделов на зашифрованном
+
 	УСТАНОВКА
 Установка системы
-Выбор ssh server и system applications
-	ЗАПУСК И ПРОВЕРКА
-lsblk
-su -
-apt-get install sudo
+Выбор только опции ssh server
+
+	ПЕРВЫЙ ЗАПУСК И ПРОВЕРКА
+// проверяем структуру разделов
+$lsblk
+// логинимся под рутом (именно с - !)
+$su -
+// устанавливаем sudo
+$apt-get install sudo
+
 	НАСТРОЙКА SSH
-nano /etc/ssh/sshd_config :
+// правим конфиг ssh
+$nano /etc/ssh/sshd_config
+// Меняем строки
 Port 4242
 PermitRootLogin: no
+
 	ROOT-ПРАВА ПОЛЬЗОВАТЕЛЮ
-usermod -aG root user
-nano /etc/sudoers:
+$usermod -aG root user
+// бэкапим конфиг sudo
+$cp /etc/sudoers /etc/sudoers.backup
+// правим конфиг sudo
+$nano /etc/sudoers
+// Добавляем строку с именем пользователя
 user    ALL=(ALL:ALL) ALL
-reboot
+$reboot
+
 	ДОСТУП ЧЕРЕЗ ТЕРМИНАЛ
-Проброс портов
-ssh user@localhost -p 4242
+Проброс портов в virtualbox
+$ssh user@localhost -p 4242
+
 	НАСТРОЙКА ВХОДА ПОД SUDO
-Defaults  badpass_message="Password is wrong, please try again"
+// логинимся под рутом
+$su -
+// ещё раз правим конфиг судо
+$nano /etc/sudoers
+// меняем фразу при неудачном вводе
+Defaults  badpass_message="Your phrase"
+// Устанавливаем количество попыток ввода
 Defaults        passwd_tries=3
+
 	ФАЙЕРВОЛ
-apt-get install ufw
-ufw status
-ufw enable
-ufw status
-sudo ufw default deny incoming
-sudo ufw default allow outcoming
-ufw allow 4242
+// устанавливаем ufw
+$apt-get install ufw
+// убеждаемся, что он не работает
+$ufw status
+// запускаем файервол
+$ufw enable
+// убеждаемся, что он работает
+$ufw status
+// даём дефолтные настройки
+$sudo ufw default deny incoming
+$sudo ufw default allow outcoming
+// разрешаем наш порт ssh
+$ufw allow 4242
 	ПОЛИТИКА ПАРОЛЕЙ
-nano /etc/login.defs
+// правим файл политики паролей
+%nano /etc/login.defs
+// меняем значения строк как здесь:
 PASS_MAX_DAYS 30
 PASS_MIN_DAYS 2
 PASS_WARN_AGE 7
-apt-get install libpam-pwquality
-cd /etc/pam.d
-cp common-password common-password.backup
-nano common-password
+// устанавливаем утиллиту политики
+$apt-get install libpam-pwquality
+// на всякий пожарный бэкапим конфиг
+$cp /etc/pam.d/common-password /etc/pam.d/common-password.backup
+// правим конфиг
+$nano /etc/pam.d/common-password
+// дописываем в эту строку следующим образом:
 password        requisite                       pam_pwquality.so retry=3 maxrepeat=3 minlen=10 dcredit=1 ucredit=1
-passwd user
-passwd root
+// меняем пароли пользователей
+// в соответствии с политикой:
+$passwd user
+$passwd root
+
 	НАСТРОЙКИ TTY
-nano /etc/systemd/logind.conf
-Раскомментировать и добааить:
+// правим конфиг tty
+$nano /etc/systemd/logind.conf
+// раскомментировать и изменить:
 NAutoVTs=8
 ReserveVT=8
+
 	ЛОГИРОВАНИЕ SUDO
-nano /etc/sudoers:
-defaults        logfile=/var/log/sudo
-Действие под пользователем с sudo
-Проверка лога:
-nano /var/log/sudo
+// ещё раз правим конфиг судо
+$nano /etc/sudoers
+// добавляем строку в секцию defaults
+Defaults        logfile=/var/log/sudo
+// совершаем действие под пользователем через sudo
+// проверяем, заолгировалось ли оно:
+$nano /var/log/sudo
+
 	СОЗДАНИЕ СКРИПТА
 // для утилиты netstat
-apt-get install net-tools
-su user
-cd ~/
-touch monitoring.sh
-nano monitoring.sh
-
+$apt-get install net-tools
+$su user
+$cd ~/
+$touch monitoring.sh
+$chmod +x ./monitoring.sh
+$nano monitoring.sh
+// заполняем скрипт командами по примеру
 
 ____________________
 ВО ВРЕМЯ ПРОВЕРКИ
