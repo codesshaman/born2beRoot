@@ -1,0 +1,130 @@
+//Эта команда демонстрирует, какие диски есть в вашей системе и на какие разделы они  поделены.
+//Также команда отображает имена ваших разделов и накопителей, в формате sda1, sda2 и так далее.
+lsblk
+
+//Эта команда демонстрирует к каким группам принадлежит ваша учетная запись
+groups
+groups <username>
+
+//Verify whether user was successfully added to sudo group
+getent group sudo
+sudo members user42
+
+//авторизация от имени пользователя из-под root
+sudo -i -u cmero
+
+//переключение между пользователями
+su <username>
+
+//Switch to root and its environment via su -.
+su -
+Password:
+
+//Создать нового пользователя
+adduser <username>
+
+//Список пользователей, отсортированный по именам
+sed 's/:.*//' /etc/passwd
+
+//Добавить пользователя в гуппу sudo
+adduser <username> sudo
+
+//Создать новую группу
+addgroup <group_name>
+
+sudo addgroup <group_name>
+sudo adduser <username> <group_name>
+
+//Исзменить hostmame
+sudo hostnamectl set-hostname <hostname>
+//Еще один способ изменения Hostname — это ручное 
+//редактирование файла /etc/hostname и файла /etc/hosts.
+//Сначала выполните команду
+sudo hostname <hostname>
+sudo nano /etc/hostname
+//Изменить текущее значение в файле на новое.
+sudo nano /etc/hosts
+//В строке вида «127.0.0.1 ваш_hostname» вписать новое имя хоста.
+
+//-v, --validate - обновить временную метку пользователя без выполнения команды
+sudo -v
+
+//Команда для подключения через маковский терминал - для выхода exit
+ssh <username>@127.0.0.1 -p 4242
+
+//для просмотра текущего статуса профиля AppArmor
+sudo apparmor_status
+
+//для просмотра текущего статуса
+ss -tuneiptun
+sudo ufw status
+sudo apparmor_status
+sudo service ssh status
+
+//Настройка MariaDB:
+sudo apt install mariadb-server - установка
+sudo mysql_secure_installation - настройка (везде yes, кроме установки пароля рута и в первом запросе нажать Enter)
+sudo mariadb - вход в оболочку MariaDB
+CREATE DATABASE mybase; - создание базы (database_name)
+GRANT ALL ON mybase.* TO 'confuser1'@'localhost' IDENTIFIED BY 'Pr*llld555' WITH GRANT OPTION;
+		- создание пользователи для дб и предоставление ему полных привелегий для дб
+FLUSH PRIVILEGES;
+exit
+mariadb -u confuser1 -p - проверка юзера
+SHOW DATABASES; - проверка бд
+DROP DATABASE mybase; - удаление бд
+SELECT User,Host FROM mysql.user; - Просмотр пользователей с выводом их прав
+DROP USER 'cmero'@'localhost'; - удаление пользователей
+
+
+sudo cp -r /home/cmero/wordpress/* /var/www/html                  */
+sudo rm -rf /home/cmero/wordpress
+
+sudo mkdir /home/cmero/ftp
+sudo mkdir /home/cmero/ftp/files
+sudo chown nobody:nogroup /home/cmero/ftp
+sudo chmod a-w /home/cmero/ftp
+
+sudo rm /usr/bin/monitoring.sh
+sudo vi /usr/bin/monitoring.sh
+sudo vi /usr/local/bin/monitoring.sh
+sudo nano /usr/local/bin/monitoring.sh
+
+sudo crontab -u root -e
+*/1 * * * *	sh /usr/local/bin/monitoring.sh
+* * * * * sleep 30; sh /usr/local/bin/monitoring.sh
+
+// -BM - размер в мегабайтах
+// -t ext4 - файловая система, которую нужно отображать
+// --total - итог
+df -BM -t ext4 --total
+
+FTP-server
+После правки конфигурационного файла FTP-сервер нужно запустить командой:
+/etc/init.d/vsftpd start
+/etc/init.d/vsftpd restart - перезапуск
+
+sudo chage -l <username>
+$ passwd опции пользователь
+Рассмотрим опции, чтобы лучше ориентироваться в использовании утилиты:
+
+-d - удалить пароль пользователя, после этого он не сможет войти
+-e - сделать пароль устаревшим
+-i - через сколько дней после того, как пароль устарел, отключить аккаунт, если пользователь не сменил пароль
+-l - запретить пользователю входить в систему
+-m - минимальное количество дней между сменами пароля
+-M - максимальное количество дней между сменами пароля
+-S - отобразить информацию об аккаунте
+-u - отменяет действие параметра -l
+-x - максимальное количество дней, пока пароль можно использовать.
+-w - количество дней, после которых нужно предупреждать пользователя о том, что надо сменить пароль.
+
+sudo chage -m 2 <username>
+sudo chage -M 30 <username>
+
+
+sudo nano /etc/sudoers.d/settings
+sudo nano /etc/login.defs
+sudo nano /etc/pam.d/common-password
+
+dpkg -l | grep ssh
