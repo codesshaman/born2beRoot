@@ -148,8 +148,18 @@ $apt install lighttpd
 $nano /etc/lighttpd/lighttpd.conf
 // разрешаем доступ по порту сервера
 $ufw allow 80
+$ufw allow 8080
+Пробрасываем порты в virtualbox
+Заходим в браузере по ip
+127.0.0.1
 
-
+	УСТАНОВКА WORDPRESS
+// заходим под рут
+$su -
+// скачиваем вордпресс
+$wget https://ru.wordpress.org/latest-ru_RU.tar.gz
+// копируем его в папку сервера
+$cp latest-ru_RU.tar.gz /var/www/html/
 ____________________
 ВО ВРЕМЯ ПРОВЕРКИ
 
