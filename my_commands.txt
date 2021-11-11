@@ -117,8 +117,8 @@ $nano monitoring.sh
 
 	НАСТРОЙКА CRON
 // добавляем скрипт в расписание
-*/1 * * * *	sh /home/<user>/monitoring.sh
-* * * * * sleep 30; sh /home/<user>/monitoring.sh
+$crontab -e
+*/10 * * * *	sh /home/<user>/monitoring.sh
 
 ____________________
 БОНУСНАЯ ЧАСТЬ
