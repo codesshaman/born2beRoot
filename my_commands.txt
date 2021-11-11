@@ -67,6 +67,7 @@ $sudo ufw default deny incoming
 $sudo ufw default allow outcoming
 // разрешаем наш порт ssh
 $ufw allow 4242
+
 	ПОЛИТИКА ПАРОЛЕЙ
 // правим файл политики паролей
 %nano /etc/login.defs
@@ -113,6 +114,9 @@ $chmod +x ./monitoring.sh
 $nano monitoring.sh
 // заполняем скрипт командами
 // по примеру из этого гита
+
+____________________
+БОНУСНАЯ ЧАСТЬ
 
 ____________________
 ВО ВРЕМЯ ПРОВЕРКИ
