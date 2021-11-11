@@ -123,6 +123,33 @@ $crontab -e
 ____________________
 БОНУСНАЯ ЧАСТЬ
 
+	УСТАНОВКА БАЗЫ ДАННЫХ
+// входим под рутом
+$su -
+// настраиваем MariaDB:
+$apt install mariadb-server - установка
+$mysql_secure_installation - настройка (везде yes, кроме установки пароля рута и в первом запросе нажать Enter)
+// входим в оболочку MariaDB
+$mariadb
+// создаём базу
+>CREATE DATABASE wordpress;
+// создаём пользователия для дб и предоставляем ему полные привелегии для дб
+>GRANT ALL ON wordpress.* TO '<user>'@'localhost' IDENTIFIED BY '111' WITH GRANT OPTION;
+>FLUSH PRIVILEGES;
+>exit
+// проверка юзера
+mariadb -u <user> -p
+// проверка бд
+SHOW DATABASES;
+
+	УСТАНОВКА СЕРВЕРА
+$apt install lighttpd
+// смотрим порты
+$nano /etc/lighttpd/lighttpd.conf
+// разрешаем доступ по порту сервера
+$ufw allow 80
+
+
 ____________________
 ВО ВРЕМЯ ПРОВЕРКИ
 
@@ -151,3 +178,4 @@ Usermod -aG group user
 nano /etc/group
 Groups
 Groups user
+$apt install wget
