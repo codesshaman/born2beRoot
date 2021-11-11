@@ -1,57 +1,32 @@
 #!/bin/bash
-echo -e "**********************************"
-echo -e "**********************************"
-echo -e "**********************************"
-echo -e "__________________________________"
-echo -e "Systen architecture: "
-arch
-echo -e "__________________________________"
-echo -e "Linux core version: "
-uname -r
-echo -e "__________________________________"
-echo -e "Number of physical processors: "
-#cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l
-grep processor /proc/cpuinfo | wc -l
-echo -e "__________________________________"
-echo -e "Number of virtual processors: "
-nproc --all
-#cat /proc/cpuinfo | grep "^processor"
-#echo -e "Total, usage and free RAM: "
-#free -t
-echo -e "__________________________________"
-echo -e "Usage free RAM in precentage: "
-#free |grep Mem |awk '{print $3/$2 * 100.0}'
-free -m | grep 'Mem:' | awk '{printf"%d/%dMB (%.2f%%)", $3, $2, $3 * 100 / $2}'
-echo -e "\n__________________________________"
-echo -e "CPU usage in precentage: "
-top -b -n 1 -d1 | grep "Cpu(s)" | awk '{print $2}'
-echo -e "__________________________________"
-echo -e "Disk usage in precentage: "
-#df -P |awk '{print $5}' | tail -n 7
-df -BM -t ext4 --total | grep 'total' | awk '{printf"%d/%.1fGb (%d%%)", $3, $2 / 1024, $5}' | tail >
-echo -e "\n__________________________________"
-echo -e "Last reboot date and time: "
-last |tail -n 1
-#who -b | awk '{print $3, $4}'
-echo -e "__________________________________"
-echo -e "Active connections: "
-#lsof -i
-netstat -n | grep 'tcp' | wc -l
-echo -e "__________________________________"
-echo -e "Active users: "
-who | wc -l
-#who --count
-echo -e "__________________________________"
-echo -e "Server IpV4 adress: "
-hostname -I
-#ip a | grep 'inet 10' | awk '{printf"%.9s", $2}'
-echo -e "__________________________________"
-echo -e "Server mac adress: "
-cat /sys/class/net/enp0s3/address
-#ip a | grep 'ether' | awk '{print $2}'
-echo -e "__________________________________"
-echo -e "Number of sudo commands: "
-cat /var/log/sudo | grep 'COMMAND' | wc -l | awk '{$2; print $0}'
-echo -e "**********************************"
-echo -e "**********************************"
-echo -e "**********************************"
+arc=$(arch)
+pcpu=$(grep "physical id" /proc/cpuinfo | sort | uniq | wc -l)
+vcpu=$(grep "^processor" /proc/cpuinfo | wc -l)
+fram=$(free -m | awk '$1 == "Mem:" {print $2}')
+uram=$(free -m | awk '$1 == "Mem:" {print $3}')
+pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
+fdisk=$(df -Bg | grep '^/dev/' | grep -v '/boot$' | awk '{ft += $2} END {print ft}')
+udisk=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} END {print ut}')
+pdisk=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} {ft+= $2} END {printf("%d"), ut/ft*100}')
+cpul=$(top -bn1 | grep '^%Cpu' | cut -c 9- | xargs | awk '{printf("%.1f%%"), $1 + $3}')
+lb=$(last |tail -n 1)
+lvmt=$(lsblk | grep "lvm" | wc -l)
+lvmu=$(if [ $lvmt -eq 0 ]; then echo no; else echo yes; fi)
+#You need to install net tools for the next step [$ sudo apt install net-tools]
+ctcp=$(cat /proc/net/sockstat{,6} | awk '$1 == "TCP:" {print $3}')
+ulog=$(users | wc -w)
+ip=$(hostname -I)
+mac=$(ip link show | awk '$1 == "link/ether" {print $2}')
+cmds=$(journalctl _COMM=sudo | grep COMMAND | wc -l) # journalctl should be running as sudo but our script is running as root so we don't need in sudo here
+wall "  #Architecture: $arc
+        #CPU physical: $pcpu
+        #vCPU: $vcpu
+        #Memory Usage: $uram/${fram}MB ($pram%)
+        #Disk Usage: $udisk/${fdisk}Gb ($pdisk%)
+        #CPU load: $cpul
+        #Last reboot: $lb
+        #LVM use: $lvmu
+        #Connexions TCP: $ctcp ESTABLISHED
+        #User log: $ulog
+        #Network: IP $ip ($mac)
+        #Sudo: $cmds cmd"
