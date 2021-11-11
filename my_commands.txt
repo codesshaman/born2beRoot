@@ -22,22 +22,30 @@ Port 4242
 PermitRootLogin: no
 
 	ROOT-ПРАВА ПОЛЬЗОВАТЕЛЮ
-$usermod -aG root user
+$usermod -aG root <user>
 // бэкапим конфиг sudo
 $cp /etc/sudoers /etc/sudoers.backup
 // правим конфиг sudo
 $nano /etc/sudoers
-// Добавляем строку с именем пользователя
-user    ALL=(ALL:ALL) ALL
+// добавляем строку с именем пользователя
+<user>    ALL=(ALL:ALL) ALL
+// перезагружаемся
 $reboot
 
 	ДОСТУП ЧЕРЕЗ ТЕРМИНАЛ
 Проброс портов в virtualbox
-$ssh user@localhost -p 4242
+$ssh <user>@localhost -p 4242
 
 	НАСТРОЙКА ВХОДА ПОД SUDO
 // логинимся под рутом
 $su -
+// проверяем группы пользователей
+$groups root
+$groups <user>
+// проверяем и/или меняем имя машины
+$nano /etc/hostname
+// проверяем имя хоста
+$nano /etc/hosts
 // ещё раз правим конфиг судо
 $nano /etc/sudoers
 // меняем фразу при неудачном вводе
@@ -103,7 +111,8 @@ $cd ~/
 $touch monitoring.sh
 $chmod +x ./monitoring.sh
 $nano monitoring.sh
-// заполняем скрипт командами по примеру
+// заполняем скрипт командами
+// по примеру из этого гита
 
 ____________________
 ВО ВРЕМЯ ПРОВЕРКИ
