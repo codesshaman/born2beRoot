@@ -1,3 +1,4 @@
+
 	ФАЙЛОВАЯ СИСТЕМА
 Создание зашифрованного раздела на /dev/sda5
 Создание всех необходимых подразделов на зашифрованном
@@ -152,6 +153,17 @@ $ufw allow 8080
 Пробрасываем порты в virtualbox
 Заходим в браузере по ip
 127.0.0.1
+
+	УСТАНОВКА PHP
+// ставим php
+$apt install php php-cgi php-mysql
+// запускам север в режиме fastcgi
+$lighty-enable-mod fastcgi
+// подключаем к сереверу php
+$lighty-enable-mod fastcgi-php
+// перезагружаем сервис
+$service lighttpd force-reload
+
 
 	УСТАНОВКА WORDPRESS
 // заходим под рут
