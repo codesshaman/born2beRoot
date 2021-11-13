@@ -135,7 +135,7 @@ $mariadb
 // создаём базу
 >CREATE DATABASE wordpress;
 // создаём пользователия для дб
-CREATE USER '<user>'@'localhost' IDENTIFIED BY 'password';
+>CREATE USER '<user>'@'localhost' IDENTIFIED BY 'password';
 // предоставляем пользователю полные привелегии для дб
 >GRANT ALL ON wordpress.* TO '<user>'@'localhost';
 >FLUSH PRIVILEGES;
