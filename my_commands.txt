@@ -216,4 +216,3 @@ Usermod -aG group user
 nano /etc/group
 Groups
 Groups user
-$apt install wget
