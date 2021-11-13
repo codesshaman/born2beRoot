@@ -174,6 +174,20 @@ $su -
 $wget https://ru.wordpress.org/latest-ru_RU.tar.gz
 // копируем его в папку сервера
 $cp latest-ru_RU.tar.gz /var/www/html/
+// распаковываем
+$tar -xvzf latest-ru_RU.tar.gz
+
+	ПРАВА ПАПКАМ
+// меняем владельца папки с вордпрессом
+$chown -R www-data:www-data /var/www/html/wordpress
+// применяем правильные права для всех папок и файлов
+$find /var/www/html/wordpress -type d -exec chmod 750 {} \;
+$find /var/www/html/wordpress -type f -exec chmod 640 {} \;
+
+	УСТАНОВКА WP
+// заходим через браузер:
+http://127.0.0.1/wordpress
+// настраиваем и наслаждаемся)
 ____________________
 ВО ВРЕМЯ ПРОВЕРКИ
 
