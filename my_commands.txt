@@ -134,14 +134,16 @@ $mysql_secure_installation - настройка (везде yes, кроме ус
 $mariadb
 // создаём базу
 >CREATE DATABASE wordpress;
-// создаём пользователия для дб и предоставляем ему полные привелегии для дб
->GRANT ALL ON wordpress.* TO '<user>'@'localhost' IDENTIFIED BY '111' WITH GRANT OPTION;
+// создаём пользователия для дб
+CREATE USER '<user>'@'localhost' IDENTIFIED BY 'password';
+// предоставляем пользователю полные привелегии для дб
+>GRANT ALL ON wordpress.* TO '<user>'@'localhost';
 >FLUSH PRIVILEGES;
 >exit
 // проверка юзера
-mariadb -u <user> -p
+$mariadb -u <user> -p
 // проверка бд
-SHOW DATABASES;
+>SHOW DATABASES;
 
 	УСТАНОВКА СЕРВЕРА
 $apt install lighttpd
