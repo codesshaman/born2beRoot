@@ -76,7 +76,7 @@ $ufw allow 4242
 PASS_MAX_DAYS 30
 PASS_MIN_DAYS 2
 PASS_WARN_AGE 7
-// устанавливаем утиллиту политики
+// устанавливаем утилиту политики
 $apt-get install libpam-pwquality
 // на всякий пожарный бэкапим конфиг
 $cp /etc/pam.d/common-password /etc/pam.d/common-password.backup
