@@ -65,7 +65,7 @@ $ufw enable
 $ufw status
 // даём дефолтные настройки
 $sudo ufw default deny incoming
-$sudo ufw default allow outcoming
+$sudo ufw default allow outgoing
 // разрешаем наш порт ssh
 $ufw allow 4242
 
