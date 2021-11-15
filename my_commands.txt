@@ -189,6 +189,25 @@ $find /var/www/html/wordpress -type f -exec chmod 640 {} \;
 // заходим через браузер:
 http://127.0.0.1/wordpress
 // настраиваем и наслаждаемся)
+
+	ДОПОЛНИТЕЛЬНЫЙ СЕРВИС: VSFTPD
+// устанавливаем
+$apt install vsftpd
+// останавливаем
+$service vsftpd stop
+// правим конфиг
+$nano /etc/vsftpd.conf
+// раскомментировать
+write_enable=YES
+chroot_local_user=YES
+// разрешаем порт
+$ufw allow 20
+// пробрасываем порт 20
+// запускаем ftp-сервер:
+$/etc/init.d/vsftpd start
+// проверяем что всё получилось:
+$/etc/init.d/vsftpd status
+
 ____________________
 ВО ВРЕМЯ ПРОВЕРКИ
 
