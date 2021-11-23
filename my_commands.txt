@@ -98,13 +98,16 @@ NAutoVTs=8
 ReserveVT=8
 
 	ЛОГИРОВАНИЕ SUDO
+// создаём каталог логирования:
+$mkdir /var/log/sudo
+$touch /var/log/sudo/sudo.log
 // ещё раз правим конфиг судо
 $nano /etc/sudoers
 // добавляем строку в секцию defaults
-Defaults        logfile=/var/log/sudo
+Defaults        logfile=/var/log/sudo/sudo.log
 // совершаем действие под пользователем через sudo
 // проверяем, заолгировалось ли оно:
-$nano /var/log/sudo
+$nano /var/log/sudo/sudo.log
 
 	СОЗДАНИЕ СКРИПТА
 // для утилиты netstat
