@@ -20,7 +20,7 @@ $apt-get install sudo
 $nano /etc/ssh/sshd_config
 // Меняем строки
 Port 4242
-PermitRootLogin: no
+PermitRootLogin no
 
 	ROOT-ПРАВА ПОЛЬЗОВАТЕЛЮ
 $usermod -aG root <user>
